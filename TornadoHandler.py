@@ -1,3 +1,4 @@
+import json
 import redis
 import tornado.ioloop,tornado.web,tornado.websocket
 from tornado.ioloop import PeriodicCallback
@@ -13,7 +14,10 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def __send_message(self):
         redis_object = redis.Redis(host='localhost', port=6379,db=0)
-        send_data = {"maze":redis_object.get('maze').decode('utf-8'),
+        maze = redis_object.get('maze').decode('utf-8')
+        maze = ('').join(list(filter(lambda c: c not in ['[',']',','],[i for i in maze])))
+        send_data = json.dumps({
+                    "maze":maze,
                     "is_goal": redis_object.get('is_goal').decode('utf-8'),
                     "player_x": redis_object.get('player_x').decode('utf-8'),
                     "player_y": redis_object.get('player_y').decode('utf-8'),
@@ -21,7 +25,9 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                     "start_y": redis_object.get('start_y').decode('utf-8'),
                     "goal_x": redis_object.get('goal_x').decode('utf-8'),
                     "goal_y": redis_object.get('goal_y').decode('utf-8'),
-                    }
+                    "width": redis_object.get('width').decode('utf-8'),
+                    "height": redis_object.get('height').decode('utf-8'),
+                    })
         self.write_message(send_data)
 
     def on_close(self):

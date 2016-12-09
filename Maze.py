@@ -115,6 +115,8 @@ class Maze:
         redis_object.set('start_y',self.start_y)
         redis_object.set('goal_x',self.goal_x)
         redis_object.set('goal_y',self.goal_y)
+        redis_object.set('width',self.screen_width)
+        redis_object.set('height',self.screen_height)
 
     def move_player(self,direction):
         if direction == 0:
