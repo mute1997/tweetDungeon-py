@@ -10,14 +10,17 @@ class StreamListener(tweepy.StreamListener):
     #データ受信時
     def on_status(self, status):
         print(status.text)
-        if status.text.find('up') != -1:
+        if status.text.find('up') != -1 and not (self.maze.is_goal):
             self.maze.move_player(0)
-        elif status.text.find('down') != -1:
+        elif status.text.find('down') != -1 and not (self.maze.is_goal):
             self.maze.move_player(1)
-        elif status.text.find('right') != -1:
+        elif status.text.find('right') != -1 and not (self.maze.is_goal):
             self.maze.move_player(2)
-        elif status.text.find('left') != -1:
+        elif status.text.find('left') != -1 and not (self.maze.is_goal):
             self.maze.move_player(3)
+        elif status.text.find('reset') != -1 and self.maze.is_goal:
+            self.maze = Maze()
+            self.maze.display_maze()
 
     def on_error(self, status_code):
         print(status_code)
