@@ -1,9 +1,11 @@
+import os,time
 import redis
-import tweepy,time
+import tweepy
 import tornado.ioloop,tornado.web,tornado.websocket
 
 from TornadoHandler import MainHandler
 from TornadoHandler import WebSocketHandler
+
 from StreamListener import StreamListener
 
 def get_auth():
@@ -27,9 +29,12 @@ if __name__ == '__main__':
     stream.filter(track=[u'#tweetDungeonLC'], async=True)
 
     #tornado
+    settings = {
+            "static_path":os.path.join(os.path.dirname(__file__), "static"),
+    }
     application = tornado.web.Application([
         (r"/",MainHandler),
         (r"/ws",WebSocketHandler)
-    ])
+    ],**settings)
     application.listen(8080)
     tornado.ioloop.IOLoop.current().start()
