@@ -9,7 +9,7 @@ class StreamListener(tweepy.StreamListener):
 
     #データ受信時
     def on_status(self, status):
-        print(status.text)
+        print(status.text.encode('utf-8'))
         if status.text.find('up') != -1 and not (self.maze.is_goal):
             self.maze.move_player(0)
         elif status.text.find('down') != -1 and not (self.maze.is_goal):
