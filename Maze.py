@@ -26,21 +26,21 @@ class Maze:
         self.write_data()
 
     def __init_player(self):
-        for i in range(0,self.screen_height):
-            for j in range(0,self.screen_width):
-                if self.maze[i][j] == 1:
-                    self.start_x = i
-                    self.start_y = j
-                    self.player_x = i
-                    self.player_y = j
+        for y in range(0,self.screen_height):
+            for x in range(0,self.screen_width):
+                if self.maze[y][x] == 1:
+                    self.start_x = x
+                    self.start_y = y
+                    self.player_x = x
+                    self.player_y = y
                     return 0
 
     def __init_goal(self):
-        for i in reversed(range(0,self.screen_height)):
-            for j in reversed(range(0,self.screen_width)):
-                if self.maze[i][j] == 1:
-                    self.goal_x = i
-                    self.goal_y = j
+        for y in reversed(range(0,self.screen_height)):
+            for x in reversed(range(0,self.screen_width)):
+                if self.maze[y][x] == 1:
+                    self.goal_x = x
+                    self.goal_y = y
                     return 0
 
     def __generate_maze(self,direction,row,col):
@@ -119,17 +119,38 @@ class Maze:
         redis_object.set('height',self.screen_height)
 
     def move_player(self,direction):
+        ##up
+        #if direction == 0:
+        #    if self.player_y - 1 < self.screen_height - 1 and self.maze[self.player_x][self.player_y - 1] == 1:
+        #        self.player_y -= 1
+        ##down
+        #elif direction == 1:
+        #    if self.player_y + 1 < self.screen_height - 1 and self.maze[self.player_x][self.player_y + 1] == 1:
+        #        self.player_y += 1
+        ##right
+        #elif direction == 2:
+        #    if self.player_x + 1 < self.screen_height - 1 and self.maze[self.player_x + 1][self.player_y] == 1:
+        #        self.player_x += 1
+        ##left
+        #elif direction == 3:
+        #    if self.player_x - 1 > 0 and self.maze[self.player_x - 1][self.player_y] == 1:
+        #        self.player_x -= 1
+
+        #up
         if direction == 0:
-            if self.player_y - 1 > 0 and self.maze[self.player_x][self.player_y - 1] == 1:
+            if self.maze[self.player_x][self.player_y - 1] == 1:
                 self.player_y -= 1
+        #down
         elif direction == 1:
-            if self.player_y + 1 > self.screen_width - 1 and self.maze[self.player_x][self.player_y + 1] == 1:
+            if self.maze[self.player_x][self.player_y + 1] == 1:
                 self.player_y += 1
+        #right
         elif direction == 2:
-            if self.player_x + 1 < self.screen_height - 1 and self.maze[self.player_x + 1][self.player_y] == 1:
+            if self.maze[self.player_x + 1][self.player_y] == 1:
                 self.player_x += 1
+        #left
         elif direction == 3:
-            if self.player_x - 1 > 0 and self.maze[self.player_x - 1][self.player_y] == 1:
+            if self.maze[self.player_x - 1][self.player_y] == 1:
                 self.player_x -= 1
 
         if self.player_x == self.goal_x and self.player_y == self.goal_y:
@@ -138,11 +159,14 @@ class Maze:
             self.is_goal = 0
 
         self.write_data()
+        print("call move_player method")
 
     def display_maze(self):
-        for i in range(self.screen_height):
-            for j in range(self.screen_width):
-                if self.maze[i][j] == 0:
+        for y in range(self.screen_height):
+            for x in range(self.screen_width):
+                if y == self.player_y and x == self.player_x:
+                    print("o ",end="")
+                elif self.maze[y][x] == 0:
                     print("x ",end="")
                 else:
                     print("  ",end="")

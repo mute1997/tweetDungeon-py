@@ -18,16 +18,45 @@ ws.onmessage = function(evt) {
     var goal_y = parseInt(maze_data["goal_y"]);
     var screen_width = parseInt(maze_data["width"]);
     var screen_height = parseInt(maze_data["height"]);
+    display_canvas(maze,start_x,start_y,goal_x,goal_y,player_x,player_y,screen_width,screen_height);
+    console.log(player_x,player_y);
 };
+
+function display_canvas(maze,start_x,start_y,goal_x,goal_y,player_x,player_y,width,height){
+    var canvas = document.getElementById('map');
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'rgb(255,255,0)';
+    ctx.fillRect(0,0,870,450);
+    for(y=0;y<height;y++){
+        for(x=0;x<width;x++){
+            if(x == start_x && y == start_y){
+                ctx.fillStyle = 'rgb(0,128,0)'
+                ctx.fillRect(x*30,y*30,30,30);
+            }else if(x == goal_x && y == goal_y){
+                ctx.fillStyle = 'rgb(255,0,0)'
+                ctx.fillRect(x*30,y*30,30,30);
+            }else if(maze[y][x] == 1){
+                ctx.fillStyle = 'rgb(255,255,255)'
+                ctx.fillRect(x*30,y*30,30,30);
+            }
+            if(x == player_x && y == player_y){
+                ctx.fillStyle = 'rgb(0,0,0)';
+                ctx.beginPath();
+                ctx.arc(x*30+15,y*30+15,10,0,Math.PI*2,false);
+                ctx.fill();
+            }
+        }
+    }
+}
 
 function parse_array(mazedata,width,height){
     var ary = mazedata.split(' ');
     var ret = new Array();
     n = 0;
-    for(i=0;i<height;i++){
-        ret[i] = new Array();
-        for(j=0;j<width;j++){
-            ret[i][j] = parseInt(ary[n]);
+    for(y=0;y<height;y++){
+        ret[y] = new Array();
+        for(x=0;x<width;x++){
+            ret[y][x] = parseInt(ary[n]);
             n++;
         }
     }
@@ -35,6 +64,6 @@ function parse_array(mazedata,width,height){
 }
 </script>
 <body>
-    It's work
+    <canvas id="map" width="870" height="450" style="background-color:yellow";></canvas>
 </body>
 </html>
