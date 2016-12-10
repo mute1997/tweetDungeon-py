@@ -14,12 +14,15 @@ class Maze:
         self.col = int(self.screen_width / 2)
         #wall 0
         #load 1
-        #player 2
         self.maze[self.row][self.col] = 1
 
         direction = [0,1,2,3]
         random.shuffle(direction)
+
         self.__generate_maze(direction,self.row,self.col)
+        self.__generate_maze(direction,self.row,self.col)
+        self.__generate_maze(direction,self.row,self.col)
+
         self.__init_player()
         self.__init_goal()
 
