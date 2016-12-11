@@ -107,7 +107,7 @@ class Maze:
         else:
             return False
 
-    def write_data(self):
+    def __write_data(self):
         redis_object = redis.Redis(host='localhost', port=6379,db=0)
         redis_object.flushall()
         redis_object.set('maze',self.maze)
@@ -144,7 +144,7 @@ class Maze:
         else:
             self.is_goal = 0
 
-        self.write_data()
+        self.__write_data()
 
     def display_maze(self):
         for y in range(self.screen_height):
